@@ -118,7 +118,7 @@ describe("jasmine.Fixtures", function() {
       })
     })
 
-    describe("when fixture contains an inline <script> tag", function(){
+    describe("when fixture contains an inline &lt;script&gt; tag", function(){
       beforeEach(function(){
         ajaxData = "<div><a id=\"anchor_01\"></a><script>$(function(){ $('#anchor_01').addClass('foo')});</script></div>"
       })
@@ -177,7 +177,7 @@ describe("jasmine.Fixtures", function() {
       })
     })
 
-    describe("when fixture contains an inline <script> tag", function(){
+    describe("when fixture contains an inline &lt;script&gt; tag", function(){
       beforeEach(function(){
         ajaxData = "<div><a id=\"anchor_01\"></a><script>$(function(){ $('#anchor_01').addClass('foo')});</script></div>"
       })
