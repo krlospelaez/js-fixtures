@@ -74,6 +74,9 @@ Additionally, two clean up methods are provided:
   
 These two methods do not have global short cut functions.
 
+## Executing Tests
+Do an `npm install` to grab the test dependencies.  Then point your browser to the index.html file (make sure node_modules is still accessible)
+
 ## Cross domain policy problems under Chrome
 
 Newer versions of Chrome don't allow file:// URIs read other file:// URIs. In effect, jasmine-jquery cannot properly load fixtures under some versions of Chrome. An override for this is to run Chrome with a switch `--allow-file-access-from-files` (I have not verified if this works for all Chrome versions though). The full discussion on this topic can be found in [this GitHub ticket](https://github.com/velesin/jasmine-jquery/issues/4).
