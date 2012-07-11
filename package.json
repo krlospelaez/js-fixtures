@@ -1,15 +1,15 @@
 {
   "author": "Duncan Wong <baduncaduncan@gmail.com>",
-  "name": "fixtures",
+  "name": "js-fixtures",
   "description": "jasmine-like fixtures without testing framework dependencies",
   "keywords": [ "test", "fixture", "mocha", "testing", "jasmine" ],
   "version": "1.0.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/chaijs/chai-jquery://github.com/badunk/fixtures"
+    "url": "https://github.com/badunk/fixtures"
   },
   "bugs": {
-    "url": "https://github.com/chaijs/chai-jquery/issues://github.com/badunk/fixtures/issues"
+    "url": "https://github.com/badunk/fixtures/issues"
   },
   "main": "./fixtures",
   "engines": {
