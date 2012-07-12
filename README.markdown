@@ -1,3 +1,10 @@
+tl;dr
+
+The code was refactored from the awesome jasmine-jquery with all jasmine dependencies removed and specs written with Chai + Mocha.  Two things to watch out for:
+-  install with npm using `npm install js-fixtures`
+-  use `fixtures.load('your-fixture.html')` instead of jasmine.fixtures.loadFixture('your-fixture.html')
+-  you must manually clean up your fixtures with fixtures.cleanUp() unlike jasmine-jquery
+
 ## Fixtures
 
 Fixture module allows you to load HTML content to be used by your tests. The overall workflow is like follows:
