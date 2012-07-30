@@ -37,10 +37,6 @@ var fixtures = fixtures || new function(){
     self.cleanUp = function(){
         jQuery('#' + self.containerId).remove();
     };
-    self.sandbox = function(attributes){
-      var attributesToSet = attributes || {};
-      return jQuery('<div id="sandbox" />').attr(attributesToSet);
-    };
     var createContainer  = function(html){
         var container;
         if(html instanceof jQuery){

@@ -224,33 +224,6 @@ describe("fixtures.Fixtures", function(){
         });
     });
 
-    describe("sandbox", function() {
-        describe("with no attributes parameter specified", function() {
-            it("should create DIV with id #sandbox", function() {
-                fixtures.sandbox().html().should.equal($('<div id="sandbox" />').html());
-            });
-        });
-
-        describe("with attributes parameter specified", function() {
-            it("should create DIV with attributes", function() {
-                var attributes = {
-                    attr1: 'attr1 value',
-                attr2: 'attr2 value'
-                };
-                var element = $(fixtures.sandbox(attributes));
-
-                element.attr('attr1').should.equal(attributes.attr1);
-                element.attr('attr2').should.equal(attributes.attr2);
-            });
-
-            it("should be able to override id by setting it as attribute", function() {
-                var idOverride = 'overridden';
-                var element = $(fixtures.sandbox({id: idOverride}));
-                element.attr('id').should.equal(idOverride);
-            });
-        });
-    });
-
     describe("cleanUp", function() {
         it("should remove fixtures container from DOM", function() {
             appendFixturesContainerToDom();
@@ -260,7 +233,7 @@ describe("fixtures.Fixtures", function(){
     });
 });
 
-describe("fixtures.Fixtures using real AJAX call", function() {
+describe("fixtures.Fixtures using mock AJAX call", function() {
     var defaultFixturesPath;
 
     beforeEach(function() {
