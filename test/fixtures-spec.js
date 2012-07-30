@@ -3,6 +3,7 @@ describe("fixtures.Fixtures", function(){
     var fixtureUrl = "some_url";
     var anotherFixtureUrl = "another_url";
     var server = sinon.fakeServer.create();;
+    var xhr = sinon.useFakeXMLHttpRequest();
     var fixturesContainer = function(){
         return $('#' + fixtures.containerId);
     };
@@ -246,6 +247,18 @@ describe("fixtures.Fixtures using mock AJAX call", function() {
     });
 
     describe("when fixture file exists", function() {
+        var stub;
+        beforeEach(function(){
+            var xhr = sinon.useFakeXMLHttpRequest();
+            xhr.onCreate = function(xhr){
+                stub = sinon.stub(xhr, "send", function(something){
+                    xhr.responseText = '<div id="real_non_mocked_fixture"></div>';
+                });
+            };
+        });
+        afterEach(function(){
+            stub.restore();
+        });
         it("should load content of fixture file", function() {
            var fixtureUrl = "real_non_mocked_fixture.html";
            var fixtureContent = fixtures.read(fixtureUrl);
