@@ -3,7 +3,7 @@
   "name": "js-fixtures",
   "description": "jasmine-like fixtures without testing framework dependencies",
   "keywords": [ "test", "fixture", "mocha", "testing", "jasmine" ],
-  "version": "1.0.0",
+  "version": "1.1.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/badunk/fixtures"
