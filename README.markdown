@@ -1,9 +1,11 @@
 tl;dr
 
-The code was refactored from the awesome jasmine-jquery with all jasmine dependencies removed and specs written with Chai + Mocha.  Things to watch out for:
+The code was refactored from the awesome jasmine-jquery with all jasmine dependencies removed, specs written with Chai + Mocha, and using an iframe implementation.  Things to watch out for:
 -  install with npm using `npm install js-fixtures` and include the fixtures.js file in your browser
 -  use `fixtures.load('your-fixture.html')` instead of jasmine.fixtures.loadFixture('your-fixture.html')
 -  Unlike jasmine-jquery, you must manually clean up your fixtures with fixtures.cleanUp()
+-  `set` and `appendSet` do not accept jQuery
+-  removed sandbox
 
 ## Fixtures
 
@@ -21,7 +23,7 @@ Inside your test:
     
 By default, fixtures are loaded from `spec/javascripts/fixtures`. You can configure this path: `fixtures.fixturesPath = 'my/new/path';`.
 
-Your fixture is being loaded into `<div id="fixtures"></div>` container that is automatically added to the DOM by the Fixture module (If you _REALLY_ must change id of this container, try: `fixtures.containerId = 'my-new-id';` in your test runner). To make tests fully independent, make sure to clean up after your fixtures with `fixtures.cleanUp`. Also, fixtures are internally cached by the Fixture module, so you can load the same fixture file in several tests without penalty to your test suite's speed.
+Your fixture is being loaded into an iframe container that is automatically added to the DOM (If you _REALLY_ must change id of this container, try: `fixtures.containerId = 'my-new-id';` in your test runner). To make tests fully independent, make sure to clean up after your fixtures with `fixtures.cleanUp`. Also, fixtures are internally cached by the Fixture module, so you can load the same fixture file in several tests without penalty to your test suite's speed.
     
 Several methods for loading fixtures are provided:
 
@@ -32,7 +34,7 @@ Several methods for loading fixtures are provided:
 - `read(fixtureUrl[, fixtureUrl, ...])`
   - Loads fixture(s) from one or more files but instead of appending them to the DOM returns them as a string (useful if you want to process fixture's content directly in your test).
 - `set(html)`
-  - Doesn't load fixture from file, but instead gets it directly as a parameter (html parameter may be a string or a jQuery element, so both `set('<div></div>')` and `set($('<div/>'))` will work). Automatically appends fixture to the DOM (to the fixtures container). It is useful if your fixture is too simple to keep it in an external file or is constructed procedurally, but you still want Fixture module to automatically handle DOM insertion and clean-up between tests for you.
+  - Doesn't load fixture from file, but instead gets it directly as a parameter. Automatically appends fixture to the DOM (to the fixtures container). It is useful if your fixture is too simple to keep it in an external file or is constructed procedurally, but you still want Fixture module to automatically handle DOM insertion and clean-up between tests for you.
 - `appendSet(html)
   - Same as set, but adds the fixtures to the pre-existing fixture container.
 - `preload(fixtureUrl[, fixtureUrl, ...])`
@@ -68,9 +70,6 @@ Sandbox method is useful if you want to quickly create simple fixtures in your t
     $('#sandbox').myTestedClassRemoverPlugin();
     expect($('#sandbox')).not.toHaveClass('my-class');
 
-This method also has a global short cut available:
-
-- `sandbox([{attributeName: value[, attributeName: value, ...]}])`
 
 Additionally, two clean up methods are provided:
 
