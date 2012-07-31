@@ -8,7 +8,7 @@ describe("fixtures.Fixtures", function(){
         return $('#' + fixtures.containerId).contents().find('body');
     };
     var appendFixturesContainerToDom = function(){
-        $('body').append('<div id="' + fixtures.containerId + '">old content</div>');
+        fixtures.set('old content');
     };
     beforeEach(function(){
         server = sinon.fakeServer.create();
@@ -17,16 +17,43 @@ describe("fixtures.Fixtures", function(){
     });
     afterEach(function(){
         server.restore();
+        fixtures.cleanUp();
         fixtures.clearCache();
-        $('#fixtures').remove();
     });
 
     describe("default initial config values", function(){
-        it("should set 'fixtures-fixtures' as the default container id", function(){
-            fixtures.containerId.should.equal('fixtures');
+        it("should set 'js-fixtures' as the default container id", function(){
+            fixtures.containerId.should.equal('js-fixtures');
         });
         it("should set 'spec/javascripts/fixtures/' as the default fixtures path", function(){
-            fixtures.fixturesPath.should.equal('spec/javascripts/fixtures');
+            fixtures.path.should.equal('spec/javascripts/fixtures');
+        });
+        it("should set body to null", function(){
+            expect(fixtures.body).to.be.null;
+        });
+        it("should set window to null", function(){
+            expect(fixtures.window).to.be.null;
+        });
+    });
+    describe("body", function(){
+        it("should not be null when initialized properly", function(){
+            fixtures.set('test');
+            fixtures.body.should.not.be.null;
+        });
+        it("should return the body contents of the iframe", function(){
+            var sillyString = 'some silly string';
+            fixtures.set(sillyString);
+            fixtures.body.should.equal(sillyString);
+        });
+    });
+    describe("window", function(){
+        it("should return the window object of the iframe", function(){
+            fixtures.set('test');
+            expect(fixtures.window).to.not.equal(window);
+        });
+        it("should contain global vars injected into frame", function(){
+            fixtures.set('<scr' + 'ipt>' + 'var test = "globalVar"' +  '</scr' + 'ipt>');
+            fixtures.window.test.should.equal('globalVar');
         });
     });
     describe("read", function(){
@@ -44,12 +71,12 @@ describe("fixtures.Fixtures", function(){
             html.should.equal(ajaxData + ajaxData);
         });
         it("should use the configured fixtures path concatenating it to the requested url (without concatenating a slash if it already has an ending one)", function(){
-            fixtures.fixturesPath = 'a path ending with slash'
+            fixtures.path = 'a path ending with slash/';
             fixtures.read(fixtureUrl);
             server.requests[0].url.should.have.string('a path ending with slash/' + fixtureUrl);
         });
         it("should use the configured fixtures path concatening it to the requested url (concatenating a slash if it doesn't have an ending one)", function(){
-            fixtures.fixturesPath = "a path without an ending slash"
+            fixtures.path = "a path without an ending slash"
             fixtures.read(fixtureUrl);
             server.requests[0].url.should.have.string("a path without an ending slash/" + fixtureUrl);
         });
@@ -79,7 +106,7 @@ describe("fixtures.Fixtures", function(){
             });
             it("should replace it with new content", function(){
                 fixtures.load(fixtureUrl);
-                fixturesBody().html().should.equal(ajaxData);
+                fixtures.body.should.equal(ajaxData);
             });
         });
         xdescribe("when fixture contains an inline script tag", function(){
@@ -129,7 +156,7 @@ describe("fixtures.Fixtures", function(){
                 fixturesBody().size().should.equal(1);
             });
         });
-        describe("when fixture contains an inline script tag", function(){
+        xdescribe("when fixture contains an inline script tag", function(){
             beforeEach(function(){
                 ajaxData = '<scr' + 'ipt>document.writeln("test");</scr' + 'ipt>';
                 server.respondWith(ajaxData);
@@ -228,12 +255,12 @@ describe("fixtures.Fixtures using mock AJAX call", function() {
     var defaultFixturesPath;
 
     beforeEach(function() {
-        defaultFixturesPath = fixtures.fixturesPath;
-        fixtures.fixturesPath = 'spec/fixtures';
+        defaultFixturesPath = fixtures.path;
+        fixtures.path = 'spec/fixtures';
     });
 
     afterEach(function() {
-        fixtures.fixturesPath = defaultFixturesPath;
+        fixtures.path = defaultFixturesPath;
     });
 
     describe("when fixture file exists", function() {

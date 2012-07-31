@@ -3,8 +3,17 @@ var fixtures = fixtures || new function(){
     var fixturesCache = {};
     var self = this;
 
-    self.containerId = 'fixtures';
-    self.fixturesPath = 'spec/javascripts/fixtures';
+    self.containerId = 'js-fixtures';
+    self.path = 'spec/javascripts/fixtures';
+    self.__defineGetter__("window", function(){
+        var iframe = document.getElementById(self.containerId);
+        if (!iframe) return null;
+
+        return iframe.contentWindow || iframe.contentDocument; 
+    });
+    self.__defineGetter__("body", function(){
+        return $('#' + self.containerId).contents().find('body').html();
+    });
     self.set = function(html){
         self.cleanUp();
         addToContainer(html)
@@ -72,6 +81,6 @@ var fixtures = fixtures || new function(){
         fixturesCache[relativeUrl] = request.responseText;
     };
     var makeFixtureUrl = function(relativeUrl){
-        return self.fixturesPath.match('/$') ? self.fixturesPath + relativeUrl : self.fixturesPath + '/' + relativeUrl;
+        return self.path.match('/$') ? self.path + relativeUrl : self.path + '/' + relativeUrl;
     };
 };
