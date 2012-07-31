@@ -9,17 +9,7 @@ The code was refactored from the awesome jasmine-jquery with all jasmine depende
 
 ## Fixtures
 
-Fixture module allows you to load HTML content to be used by your tests. The overall workflow is like follows:
-
-In _myfixture.html_ file:
-
-    <div id="my-fixture">some complex content here</div>
-    
-Inside your test:
-
-    fixtures.load('myfixture.html');
-    $('#my-fixture').myTestedPlugin();
-    expect($('#my-fixture')).to...;
+Fixture module allows you to load HTML content to be used by your tests.
     
 By default, fixtures are loaded from `spec/javascripts/fixtures`. You can configure this path: `fixtures.path = 'my/new/path';`.
 
