@@ -4,8 +4,8 @@ The code was refactored from the awesome jasmine-jquery with all jasmine depende
 -  install with npm using `npm install js-fixtures` and include the fixtures.js file in your browser
 -  use `fixtures.load('your-fixture.html')` instead of jasmine.fixtures.loadFixture('your-fixture.html')
 -  Unlike jasmine-jquery, you must manually clean up your fixtures with fixtures.cleanUp()
--  `set` and `appendSet` do not accept jQuery
--  removed sandbox
+-  `set` and `appendSet` methods do not accept jQuery
+-  No sandbox shortcut
 
 ## Fixtures
 
@@ -40,37 +40,6 @@ Several methods for loading fixtures are provided:
 - `preload(fixtureUrl[, fixtureUrl, ...])`
   - Pre-loads fixture(s) from one or more files and stores them into cache, without returning them or appending them to the DOM. All subsequent calls to `load` or `read` methods will then get fixtures content from cache, without making any AJAX calls (unless cache is manually purged by using `clearCache` method). Pre-loading all fixtures before a test suite is run may be useful when working with libraries like jasmine-ajax that block or otherwise modify the inner workings of JS or jQuery AJAX calls.
 
-Also, a helper method for creating HTML elements for your tests is provided:
-
-- `sandbox([{attributeName: value[, attributeName: value, ...]}])`
-
-It creates an empty DIV element with a default id="sandbox". If a hash of attributes is provided, they will be set for this DIV tag. If a hash of attributes contains id attribute it will override the default value. Custom attributes can also be set. So e.g.:
-
-    sandbox();
-    
-Will return:
-
-    <div id="sandbox"></div>    
-    
-And:
-
-    sandbox({
-      id: 'my-id',
-      class: 'my-class',
-      myattr: 'my-attr'
-    });
-    
-Will return:
-
-    <div id="my-id" class="my-class" myattr="my-attr"></div>
-
-Sandbox method is useful if you want to quickly create simple fixtures in your tests without polluting them with HTML strings:
-
-    setFixtures(sandbox({class: 'my-class'}));
-    $('#sandbox').myTestedClassRemoverPlugin();
-    expect($('#sandbox')).not.toHaveClass('my-class');
-
-
 Additionally, two clean up methods are provided:
 
 - `clearCache()`
@@ -81,7 +50,7 @@ Additionally, two clean up methods are provided:
 These two methods do not have global short cut functions.
 
 ## Executing Tests
-Do an `npm install` to grab the test dependencies.  Then point your browser to the index.html file (make sure node_modules is still accessible)
+Do an `npm install` to grab the test dependencies.  Then point your browser to the index.html file.
 
 ## Cross domain policy problems under Chrome
 
