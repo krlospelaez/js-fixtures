@@ -47,7 +47,7 @@ Additionally, two clean up methods are provided:
 - `cleanUp()`
   - cleans-up fixtures container
 
-Finally, there are two convenience methods to access the contents of the sandboxed iframe:
+Finally, there are two convenience properties to access the contents of the sandboxed iframe:
 - `body`
   - returns the html contents of the body.  Use it to assert various values on the body of the iframe DOM.
 - `window`
