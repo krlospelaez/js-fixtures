@@ -38,19 +38,24 @@ var fixtures = fixtures || new function(){
         jQuery('#' + self.containerId).remove();
     };
     var createContainer  = function(html){
-        var container;
-        if(html instanceof jQuery){
-            container = jQuery('<div id="' + self.containerId + '" />');
-            container.html(html);
-        } else{
-            container = '<div id="' + self.containerId + '">' + html + '</div>'
-        }
-        jQuery('body').append(container);
+
+        var iframe = document.createElement('iframe');
+        iframe.setAttribute("id", self.containerId);
+        $('body').append(iframe);
+        var doc = iframe.contentWindow || iframe.contentDocument;
+        doc = doc.document ? doc.document : doc;
+
+        doc.open();
+        doc.write(html);
+        doc.close();
     };
     var addToContainer = function(html){
-        var container = jQuery('body').find('#' + self.containerId).append(html);
+        var container = jQuery('#' + self.containerId);
         if (!container.length){
             createContainer(html);
+        }
+        else{
+            container.contents().find('body').append(html);
         }
     };
     var getFixtureHtml = function(url){
