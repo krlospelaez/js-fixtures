@@ -21,9 +21,9 @@ Inside your test:
     $('#my-fixture').myTestedPlugin();
     expect($('#my-fixture')).to...;
     
-By default, fixtures are loaded from `spec/javascripts/fixtures`. You can configure this path: `fixtures.fixturesPath = 'my/new/path';`.
+By default, fixtures are loaded from `spec/javascripts/fixtures`. You can configure this path: `fixtures.path = 'my/new/path';`.
 
-Your fixture is being loaded into an iframe container that is automatically added to the DOM (If you _REALLY_ must change id of this container, try: `fixtures.containerId = 'my-new-id';` in your test runner). To make tests fully independent, make sure to clean up after your fixtures with `fixtures.cleanUp`. Also, fixtures are internally cached by the Fixture module, so you can load the same fixture file in several tests without penalty to your test suite's speed.
+Your fixture is being loaded into an iframe container that is automatically added to the DOM (If you _REALLY_ must change id of this container, try: `fixtures.containerId = 'my-new-id';` in your test runner). To make tests fully independent, make sure to clean up after your fixtures with `fixtures.cleanUp`. Also, fixtures are internally cached, so you can load the same fixture file in several tests without penalty to your test suite's speed.
     
 Several methods for loading fixtures are provided:
 
@@ -46,8 +46,12 @@ Additionally, two clean up methods are provided:
   - purges Fixture module internal cache (you should need it only in very special cases; typically, if you need to use it, it may indicate a smell in your test code)
 - `cleanUp()`
   - cleans-up fixtures container
-  
-These two methods do not have global short cut functions.
+
+Finally, there are two convenience methods to access the contents of the sandboxed iframe:
+- `body`
+  - returns the html contents of the body.  Use it to assert various values on the body of the iframe DOM.
+- `window`
+  - returns the global window reference of the iframe, giving you the ability to use the global variables injected into that context.
 
 ## Executing Tests
 Do an `npm install` to grab the test dependencies.  Then point your browser to the index.html file.
