@@ -114,9 +114,9 @@ describe("fixtures.Fixtures", function(){
                 expect(fixtures.body()).to.equal(ajaxData);
             });
         });
-        xdescribe("when fixture contains an inline script tag", function(){
+        describe("when fixture contains an inline script tag", function(){
             beforeEach(function(){
-                ajaxData = "<script>document.writeln('test')</script>";
+                ajaxData = "<script>document.write('test')</script>";
                 server.respondWith(ajaxData);
             });
             it("should execute the inline javascript after the fixture has been inserted into the body", function(){
@@ -161,15 +161,15 @@ describe("fixtures.Fixtures", function(){
                 expect(fixturesBody().size()).to.equal(1);
             });
         });
-        xdescribe("when fixture contains an inline script tag", function(){
+        describe("when fixture contains an inline script tag", function(){
             beforeEach(function(){
-                ajaxData = '<scr' + 'ipt>document.writeln("test");</scr' + 'ipt>';
+                ajaxData = '<scr' + 'ipt>document.write("test");</scr' + 'ipt>';
                 server.respondWith(ajaxData);
             });
 
             it("should execute the inline javascript after the fixture has been inserted into the body", function(){
                 fixtures.appendLoad(fixtureUrl);
-                expect($.trim(fixturesBody().html())).to.equal('test');
+                expect(fixturesBody().html()).to.equal('test');
             });
         });
     });
