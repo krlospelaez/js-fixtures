@@ -1,6 +1,6 @@
 tl;dr
 
-The code was refactored from the awesome jasmine-jquery with all jasmine dependencies removed, specs written with Chai + Mocha, and using an iframe implementation.  Things to watch out for:
+The code was refactored from the awesome jasmine-jquery with all jasmine and jquery dependencies removed, specs written with Chai + Mocha, and using an iframe implementation.  Things to watch out for:
 -  install with npm using `npm install js-fixtures` and include the fixtures.js file in your browser
 -  use `fixtures.load('your-fixture.html')` instead of jasmine.fixtures.loadFixture('your-fixture.html')
 -  Unlike jasmine-jquery, you must manually clean up your fixtures with fixtures.cleanUp()
