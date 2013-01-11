@@ -1,11 +1,14 @@
-describe("fixtures.Fixtures", function(){
+describe("fixtures", function(){
     var ajaxData = "some ajax data";
     var fixtureUrl = "some_url";
     var anotherFixtureUrl = "another_url";
     var server = sinon.fakeServer.create();
     var xhr = sinon.useFakeXMLHttpRequest();
     var fixturesBody = function(){
-        return $('#' + fixtures.containerId).contents().find('body');
+        var iframe = document.getElementById(fixtures.containerId);
+        var iframeWindow = iframe.contentWindow || iframe.contentDocument;
+
+        return iframeWindow.document.body;
     };
     var appendFixturesContainerToDom = function(){
         fixtures.set('old content');
@@ -89,20 +92,20 @@ describe("fixtures.Fixtures", function(){
     describe("load", function(){
         it("should insert fixture HTML into container", function(){
             fixtures.load(fixtureUrl);
-            expect(fixturesBody().html()).to.equal(ajaxData);
+            expect(fixturesBody().innerHTML).to.equal(ajaxData);
         });
         it("should insert duplicated fixture HTML into container when the same url is provided twice in a single call", function(){
             fixtures.load(fixtureUrl, fixtureUrl);
-            expect(fixturesBody().html()).to.equal(ajaxData + ajaxData);
+            expect(fixturesBody().innerHTML).to.equal(ajaxData + ajaxData);
         });
         it("should insert merged HTML of two fixtures into container when two different urls are provided in a single call", function(){
             fixtures.load(fixtureUrl, anotherFixtureUrl);
-            expect(fixturesBody().html()).to.equal(ajaxData + ajaxData);
+            expect(fixturesBody().innerHTML).to.equal(ajaxData + ajaxData);
         });
         describe("when fixture container does not exist", function(){
             it("should automatically create fixtures container and append it to the DOM", function(){
                 fixtures.load(fixtureUrl);
-                expect(fixturesBody().size()).to.equal(1);
+                expect(document.getElementById(fixtures.containerId)).to.not.be.null;
             });
         });
         describe("when fixture container exists", function(){
@@ -121,7 +124,7 @@ describe("fixtures.Fixtures", function(){
             });
             it("should execute the inline javascript after the fixture has been inserted into the body", function(){
                 fixtures.load(fixtureUrl);
-                expect(fixturesBody().html()).to.equal('test');
+                expect(fixturesBody().innerHTML).to.equal('test');
             });
         });
     });
@@ -132,19 +135,19 @@ describe("fixtures.Fixtures", function(){
         });
         it("should insert fixture HTML into container", function(){
             fixtures.appendLoad(fixtureUrl);
-            expect(fixturesBody().html()).to.equal(ajaxData);
+            expect(fixturesBody().innerHTML).to.equal(ajaxData);
         });
         it("should insert duplicated fixture html into container when the same url is provided twice in a single call", function(){
             fixtures.appendLoad(fixtureUrl, anotherFixtureUrl);
-            expect(fixturesBody().html()).to.equal(ajaxData + ajaxData);
+            expect(fixturesBody().innerHTML).to.equal(ajaxData + ajaxData);
         });
         it("should insert merged HTML of two fixtures into container when two different urls are provided in a single call", function(){
             fixtures.appendLoad(fixtureUrl, anotherFixtureUrl);
-            expect(fixturesBody().html()).to.equal(ajaxData + ajaxData);
+            expect(fixturesBody().innerHTML).to.equal(ajaxData + ajaxData);
         });
         it("should automatically create fixtures container and append it to the DOM", function(){
             fixtures.appendLoad(fixtureUrl);
-            expect(fixturesBody().size()).to.equal(1);
+            expect(document.getElementById(fixtures.containerId)).to.not.be.null;
         });
         describe("with a prexisting fixture",function(){
             beforeEach(function() {
@@ -153,12 +156,12 @@ describe("fixtures.Fixtures", function(){
 
             it("should add new content", function() {
                 fixtures.appendLoad(fixtureUrl);
-                expect(fixturesBody().html()).to.equal(ajaxData + ajaxData);
+                expect(fixturesBody().innerHTML).to.equal(ajaxData + ajaxData);
             });
 
             it("should not add a new fixture container", function(){
                 fixtures.appendLoad(fixtureUrl);
-                expect(fixturesBody().size()).to.equal(1);
+                expect(document.getElementById(fixtures.containerId)).to.not.be.null;
             });
         });
         describe("when fixture contains an inline script tag", function(){
@@ -169,7 +172,7 @@ describe("fixtures.Fixtures", function(){
 
             it("should execute the inline javascript after the fixture has been inserted into the body", function(){
                 fixtures.appendLoad(fixtureUrl);
-                expect(fixturesBody().html()).to.equal('test');
+                expect(fixturesBody().innerHTML).to.equal('test');
             });
         });
     });
@@ -197,13 +200,13 @@ describe("fixtures.Fixtures", function(){
     describe("set", function() {
         it("should insert HTML into container", function() {
             fixtures.set(html);
-            expect(fixturesBody().html().toLowerCase()).to.equal(html);
+            expect(fixturesBody().innerHTML.toLowerCase()).to.equal(html);
         });
 
         describe("when fixture container does not exist", function() {
             it("should automatically create fixtures container and append it to DOM", function() {
                 fixtures.set(html);
-                expect(fixturesBody().size()).to.equal(1);
+                expect(document.getElementById(fixtures.containerId)).to.not.be.null;
             });
         });
 
@@ -214,7 +217,7 @@ describe("fixtures.Fixtures", function(){
 
             it("should replace it with new content", function() {
                 fixtures.set(html);
-                expect(fixturesBody().html().toLowerCase()).to.equal(html);
+                expect(fixturesBody().innerHTML.toLowerCase()).to.equal(html);
             });
         });
     });
@@ -222,13 +225,13 @@ describe("fixtures.Fixtures", function(){
     describe("appendSet",function(){
         it("should insert HTML into container", function() {
             fixtures.appendSet(html);
-            expect(fixturesBody().html().toLowerCase()).to.equal(html);
+            expect(fixturesBody().innerHTML.toLowerCase()).to.equal(html);
         });
 
         describe("when fixture container does not exist", function() {
             it("should automatically create fixtures container and append it to DOM", function() {
                 fixtures.appendSet(html);
-                expect(fixturesBody().size()).to.equal(1);
+                expect(document.getElementById(fixtures.containerId)).to.not.be.null;
             });
         });
 
@@ -239,7 +242,7 @@ describe("fixtures.Fixtures", function(){
 
             it("should add new content", function() {
                 fixtures.appendSet(html);
-                expect(fixturesBody().text()).to.equal(text+text);
+                expect(fixturesBody().innerHTML).to.equal(html+html);
             });
         });
     });
@@ -248,12 +251,15 @@ describe("fixtures.Fixtures", function(){
         it("should remove fixtures container from DOM", function() {
             appendFixturesContainerToDom();
             fixtures.cleanUp();
-            expect(fixturesBody().size()).to.equal(0);
+            expect(document.getElementById(fixtures.containerId)).to.be.null;
+        });
+        it('should succeed even if cleanup is called without loading', function(){
+            fixtures.cleanUp();
         });
     });
 });
 
-describe("fixtures.Fixtures using mock AJAX call", function() {
+describe("fixtures using mock AJAX call", function() {
     var defaultFixturesPath;
 
     beforeEach(function() {
