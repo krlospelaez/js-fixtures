@@ -11,17 +11,15 @@
     <script src="../node_modules/sinon/lib/sinon/util/fake_xml_http_request.js"></script>
     <script src="../node_modules/sinon/lib/sinon/util/fake_server.js"></script>
     <script src="../node_modules/expect.js/expect.js"></script>
-    <script src="../fixtures.js"></script>
+
+    <!-- too lazy to get all test dependencies loaded through AMD -->
+    <script data-main="main" src="../node_modules/requirejs/require.js"></script>
     <script>
       mocha.setup({
         ui: 'bdd',
         globals: ['js-fixtures'] //for IE not to complain
       });
-      window.onload = function () {
-        var runner = mocha.run();
-      };
     </script>
-    <script src="fixtures-spec.js"></script>
   </head>
   <body>
     <div id="mocha"></div>
