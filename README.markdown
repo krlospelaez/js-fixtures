@@ -1,11 +1,21 @@
-tl;dr
+The code was completely refactored from the awesome jasmine-jquery with all jasmine and jquery dependencies removed, specs written with Chai + Mocha, and using an iframe implementation as a sandbox.  This allows the fixtures to be more portable and prevents it from bleeding into the test runner.
 
-The code was refactored from the awesome jasmine-jquery with all jasmine and jquery dependencies removed, specs written with Chai + Mocha, and using an iframe implementation.  Things to watch out for:
--  install with npm using `npm install js-fixtures` and include the fixtures.js file in your browser
--  use `fixtures.load('your-fixture.html')` instead of jasmine.fixtures.loadFixture('your-fixture.html')
--  Unlike jasmine-jquery, you must manually clean up your fixtures with fixtures.cleanUp()
+## Installation
+
+Install with npm using `npm install js-fixtures` and include the fixtures.js file in your browser (or just download the raw from github).
+
+You may also load it using AMD with `require('fixtures')`
+
+## Usage
+
+Use `fixtures.load('your-fixture.html')` in your specs instead of `jasmine.fixtures.loadFixture('your-fixture.html')`
+
+Clean up fixtures with `fixtures.cleanUp` (perhaps in a `afterEach()` block)
+
+## Gotchas (if you're used to jasmine-jquery)
+
 -  `set` and `appendSet` methods do not accept jQuery
--  No sandbox shortcut
+-  sandbox shortcut was removed from jasmine-jquery
 
 ## Fixtures
 
