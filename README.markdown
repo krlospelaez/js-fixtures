@@ -1,4 +1,4 @@
-The code was completely refactored from the awesome jasmine-jquery with all jasmine and jquery dependencies removed, specs written with Chai + Mocha, and using an iframe implementation as a sandbox.  This allows the fixtures to be more portable and prevents it from bleeding into the test runner.
+The code was completely refactored from the awesome jasmine-jquery with all jasmine and jquery dependencies removed, specs written with Chai + Mocha, and using an iframe implementation as a sandbox.  This allows the fixtures to be more portable and minimizes side effects with the test runner.
 
 ## Installation
 
