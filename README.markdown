@@ -1,22 +1,5 @@
 The code was completely refactored from the awesome jasmine-jquery with all jasmine and jquery dependencies removed, specs written with Chai + Mocha, and using an iframe implementation as a sandbox.  This allows the fixtures to be more portable and minimizes side effects with the test runner.
 
-## Installation
-
-Install with npm using `npm install js-fixtures` and include the fixtures.js file in your browser (or just download the raw from github).
-
-You may also load it using AMD with `require('fixtures')`
-
-## Usage
-
-Use `fixtures.load('your-fixture.html')` in your specs instead of `jasmine.fixtures.loadFixture('your-fixture.html')`
-
-Clean up fixtures with `fixtures.cleanUp` (perhaps in a `afterEach()` block)
-
-## Gotchas (if you're used to jasmine-jquery)
-
--  `set` and `appendSet` methods do not accept jQuery
--  sandbox shortcut was removed from jasmine-jquery
-
 ## Fixtures
 
 Fixture module allows you to load HTML content to be used by your tests.
@@ -52,6 +35,23 @@ Finally, there are two convenience properties to access the contents of the sand
   - returns the html contents of the body.  Use it to assert various values on the body of the iframe DOM.
 - `window`
   - returns the global window reference of the iframe, giving you the ability to use the global variables injected into that context.
+
+## Installation
+
+Install with npm using `npm install js-fixtures` and include the fixtures.js file in your browser (or just download the raw from github).
+
+You may also load it using AMD.
+
+## Usage
+
+Use `fixtures.load('your-fixture.html')` in your specs instead of `jasmine.fixtures.loadFixture('your-fixture.html')`
+
+Clean up fixtures with `fixtures.cleanUp` (perhaps in a `afterEach()` block)
+
+## Gotchas (if you're used to jasmine-jquery)
+
+-  `set` and `appendSet` methods do not accept jQuery
+-  sandbox shortcut was removed from jasmine-jquery
 
 ## Executing Tests
 Do an `npm install` to grab the test dependencies.  Then point your browser to the index.html file.
