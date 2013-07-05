@@ -1,0 +1,10 @@
+{
+  "name": "js-fixtures",
+  "version": "1.2.0",
+  "main": "fixtures.js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components"
+  ]
+}
