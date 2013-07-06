@@ -22,6 +22,8 @@ Several methods for loading fixtures are provided:
   - Same as set, but adds the fixtures to the pre-existing fixture container.
 - `preload(fixtureUrl[, fixtureUrl, ...])`
   - Pre-loads fixture(s) from one or more files and stores them into cache, without returning them or appending them to the DOM. All subsequent calls to `load` or `read` methods will then get fixtures content from cache, without making any AJAX calls (unless cache is manually purged by using `clearCache` method). Pre-loading all fixtures before a test suite is run may be useful when working with libraries like jasmine-ajax that block or otherwise modify the inner workings of JS or jQuery AJAX calls.
+- `sandbox(jsObject)`
+  - Creates a quick fixture from the js object you provide (ex. `sandbox({id: 'foo-fixture', class: 'cool'})` )
 
 Additionally, two clean up methods are provided:
 
@@ -51,7 +53,6 @@ Clean up fixtures with `fixtures.cleanUp` (perhaps in a `afterEach()` block)
 ## Gotchas (if you're used to jasmine-jquery)
 
 -  `set` and `appendSet` methods do not accept jQuery
--  sandbox shortcut was removed from jasmine-jquery
 
 ## Executing Tests
 Do an `npm install` to grab the test dependencies.  Then point your browser to the index.html file.
