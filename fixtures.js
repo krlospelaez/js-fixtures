@@ -47,6 +47,9 @@
         self.appendLoad = function(){
             addToContainer(self.read.apply(self, arguments));
         };
+        self.sandbox = function(obj){
+            addToContainer(objToHTML(obj));
+        };
         self.read = function(){
             var htmlChunks = [];
 
@@ -102,6 +105,13 @@
         };
         var makeFixtureUrl = function(relativeUrl){
             return self.path.match('/$') ? self.path + relativeUrl : self.path + '/' + relativeUrl;
+        };
+        var objToHTML = function(obj){
+            var divElem = document.createElement('div'); 
+            for (var key in obj){
+                divElem.setAttribute(key, obj[key]);
+            }
+            return divElem.outerHTML;
         };
     }
 ));

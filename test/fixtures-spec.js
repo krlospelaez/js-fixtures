@@ -224,6 +224,16 @@ define(function(require){
                     });
                 });
             });
+            describe('sandbox', function(){
+                it('should insert the sandbox into the container', function(){
+                    fixtures.sandbox({id: 'foo'});
+                    expect(fixturesBody().innerHTML).to.equal('<div id="foo"></div>');
+                });
+                it('accepts booleans, numbers, and string', function(){
+                    fixtures.sandbox({class: 'blah', selected: true, "data-blah": 3});
+                    expect(fixturesBody().innerHTML).to.equal('<div class="blah" selected="true" data-blah="3"></div>');
+                });
+            });
 
             describe("appendSet",function(){
                 it("should insert HTML into container", function() {
