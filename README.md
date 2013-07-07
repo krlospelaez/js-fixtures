@@ -35,24 +35,20 @@ Clean up fixtures with `fixtures.cleanUp` (perhaps in a `afterEach()` block)
 Several methods for loading fixtures are provided:
 
 - `load(fixtureUrl[, fixtureUrl, ...])`
-  - Loads fixture(s) from one or more files and automatically appends them to the DOM (to the fixtures container).  Subsequent calls to `load` performs an automatic clean up.
-- `appendLoad(fixtureUrl[, fixtureUrl, ...])`
-  - Same as load, but adds the fixtures to the pre-existing fixture container.
-- `read(fixtureUrl[, fixtureUrl, ...])`
-  - Loads fixture(s) from one or more files but instead of appending them to the DOM returns them as a string (useful if you want to process fixture's content directly in your test).
+  - Loads fixture(s) from one or more files and automatically appends them to the DOM (to the fixtures container).
 - `set(html)`
-  - Loads html markup directly without specifying a path
-- `appendSet(html)`
-  - Same as set, but adds the fixtures to the pre-existing fixture container
-- `preload(fixtureUrl[, fixtureUrl, ...])`
-  - Pre-loads fixture(s) from one or more files and stores them into cache, without returning them or appending them to the DOM. All subsequent calls to `load` or `read` methods will then get fixtures content from cache, without making any AJAX calls (unless cache is manually purged by using `clearCache` method).
+  - Same as `load` except you may load markup directly without specifying a path
 - `sandbox(jsObject)`
   - Creates a quick fixture from the js object you provide (ex. `sandbox({id: 'foo-fixture', class: 'cool'})` )
+- `read(fixtureUrl[, fixtureUrl, ...])`
+  - Loads fixture(s) from one or more files but instead of appending them to the DOM returns them as a string (useful in combination with `set` if you want to use a templating engine).
+- `cache(fixtureUrl[, fixtureUrl, ...])`
+  - Pre-loads fixture(s) from one or more files and stores them into cache, without returning them or appending them to the DOM.
 
 Additionally, two clean up methods are provided:
 
 - `clearCache()`
-  - purges Fixture module internal cache (you should need it only in very special cases; typically, if you need to use it, it may indicate a smell in your test code)
+  - purges internal cache
 - `cleanUp()`
   - cleans-up fixtures container
 
