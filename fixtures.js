@@ -1,6 +1,6 @@
 "use strict";
 (function(fixtures){
-    if (typeof require === "function" && typeof exports === "object" && typeof module === "object") {
+    if (typeof require === 'function' && typeof exports === 'object' && typeof module === 'object') {
         // NodeJS
         module.exports = fixtures;
     } else if (typeof define === 'function' && define.amd){
@@ -8,7 +8,7 @@
             return fixtures;
         });
     } else{
-        var global = (false || eval)("this");
+        var global = (false || eval)('this');
         global.fixtures = fixtures;
     }
 
@@ -30,22 +30,14 @@
             var content = self.window().document.body.innerHTML;
             return content; 
         };
-        self.set = function(html){
-            self.cleanUp();
-            addToContainer(html);
-        };
-        self.appendSet = function(html){
-            addToContainer(html);
-        };
-        self.preload = function(){
-            self.read.apply(self, arguments);
-        };
         self.load = function(){
-            self.cleanUp();
-            createContainer(self.read.apply(self, arguments));
-        };
-        self.appendLoad = function(){
             addToContainer(self.read.apply(self, arguments));
+        };
+        self.set = function(html){
+            addToContainer(html);
+        };
+        self.cache = function(){
+            self.read.apply(self, arguments);
         };
         self.sandbox = function(obj){
             addToContainer(objToHTML(obj));
@@ -71,8 +63,8 @@
         var createContainer  = function(html){
 
             var iframe = document.createElement('iframe');
-            iframe.setAttribute("id", self.containerId);
-            iframe.style.display = "none";
+            iframe.setAttribute('id', self.containerId);
+            iframe.style.display = 'none';
             document.body.appendChild(iframe);
             var doc = iframe.contentWindow || iframe.contentDocument;
             doc = doc.document ? doc.document : doc;
@@ -99,7 +91,7 @@
         var loadFixtureIntoCache = function(relativeUrl){
             var url = makeFixtureUrl(relativeUrl);
             var request = new XMLHttpRequest();
-            request.open("GET", url + "?" + new Date().getTime(), false);
+            request.open('GET', url + '?' + new Date().getTime(), false);
             request.send(null);
             fixturesCache[relativeUrl] = request.responseText;
         };
