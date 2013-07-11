@@ -101,6 +101,11 @@
         var objToHTML = function(obj){
             var divElem = document.createElement('div'); 
             for (var key in obj){
+                // IE < 9 compatibility 
+                if (key === 'class'){
+                    divElem.className = obj[key];
+                    continue;
+                }
                 divElem.setAttribute(key, obj[key]);
             }
             return divElem.outerHTML;
