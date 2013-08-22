@@ -40,7 +40,7 @@ describe('my jquery plugin', function(){
         // etc.. etc..
     });
     afterEach(function(){
-        fixtures.clearCache(); // cleans up the fixture for the next test
+        fixtures.cleanUp(); // cleans up the fixture for the next test
     });
 });
 ```
