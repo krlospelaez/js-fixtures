@@ -1,8 +1,6 @@
 ## Fixtures
 
-The fixtures module allows you to load HTML content to be used by your tests.
-
-Your fixture is being loaded into an iframe container that is automatically added to the DOM.  Fixtures are internally cached, so you can load the same fixture file in several tests without penalty to your test suite's speed.
+The fixtures module allows you to load HTML content to be used by your tests.  Try using this in conjunction with a powerful assertion library such as [chai-jquery](https://github.com/chaijs/chai-jquery).
 
 The code was completely refactored from the awesome jasmine-jquery with all jasmine and jquery dependencies removed, specs written with Chai + Mocha, and using an iframe implementation as a sandbox.  This allows the fixtures to be more portable and minimizes side effects with the test runner.
 
@@ -26,11 +24,29 @@ define(['fixtures'], function(fixtures){
 
 ## Usage
 
-Use `fixtures.load('your-fixture.html')` in your specs.  Fixtures will load from `/specs/javascript/your-fixture.html` (see below to change this path).
+Use `fixtures.load('your-fixture.html')` in your specs.  Fixtures will load from `/specs/javascript/your-fixture.html` (see below to change this path).  Once that is setup, you should be able to write specs that look like this:
 
-Clean up fixtures with `fixtures.cleanUp` (perhaps in a `afterEach()` block)
+```javascript
+describe('my jquery plugin', function(){
+    var $$;
+    beforeEach(function(){
+        fixtures.load('fixture-with-jquery-and-plugin.html');
+        $$ = fixtures.window().jQuery; // access the jquery instance from within the fixtures context
+        $$('body').pizzazz();
+    });
+    it('it throws a lot of pizzazz on the screen', function(){
+        $$('body').should.have.wonderful.colors;
+        $$('body').should.contain(1000000).children;
+        // etc.. etc..
+    });
+    afterEach(function(){
+        fixtures.clearCache(); // cleans up the fixture for the next test
+    });
+});
+```
 
 ## Documentation
+Your fixture is being loaded into an iframe container that is automatically added to the DOM.  Fixtures are internally cached, so you can load the same fixture file in several tests without penalty to your test suite's speed.
 
 Several methods for loading fixtures are provided:
 
@@ -52,7 +68,7 @@ Additionally, two clean up methods are provided:
 - `cleanUp()`
   - cleans-up fixtures container
 
-Finally, there are two convenience properties to access the contents of the sandboxed iframe:
+Finally, there are two convenience methods to access the contents of the sandboxed iframe:
 - `body`
   - returns the html contents of the body.  Use it to assert various values on the body of the iframe DOM.
 - `window`
