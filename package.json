@@ -12,10 +12,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/badunk/fixtures"
+    "url": "https://github.com/badunk/js-fixtures"
   },
   "bugs": {
-    "url": "https://github.com/badunk/fixtures/issues"
+    "url": "https://github.com/badunk/js-fixtures/issues"
   },
   "main": "./fixtures",
   "engines": {
