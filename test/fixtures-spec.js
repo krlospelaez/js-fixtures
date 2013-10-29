@@ -183,7 +183,12 @@ define(function(require){
                 });
                 it('accepts booleans, numbers, and string', function(){
                     fixtures.sandbox({class: 'blah', selected: true, "data-blah": 3});
-                    expect(fixturesBody().innerHTML).to.equal('<div class="blah" selected="true" data-blah="3"></div>');
+                    expect(fixturesBody().childNodes.length).to.equal(1);
+                    var appendedDiv = fixturesBody().childNodes[0];
+
+                    expect(appendedDiv.getAttribute('class')).to.equal('blah');
+                    expect(appendedDiv.getAttribute('selected')).to.equal('true');
+                    expect(appendedDiv.getAttribute('data-blah')).to.equal('3');
                 });
             });
 
