@@ -7,12 +7,6 @@ define(function(require){
             var anotherFixtureUrl = "another_url";
             var server = sinon.fakeServer.create();
             var xhr = sinon.useFakeXMLHttpRequest();
-            var fixturesBody = function(){
-                var iframe = document.getElementById(fixtures.containerId);
-                var iframeWindow = iframe.contentWindow || iframe.contentDocument;
-
-                return iframeWindow.document.body;
-            };
             var appendFixturesContainerToDom = function(){
                 fixtures.set('old content');
             };
@@ -95,15 +89,15 @@ define(function(require){
             describe("load", function(){
                 it("should insert fixture HTML into container", function(){
                     fixtures.load(fixtureUrl);
-                    expect(fixturesBody().innerHTML).to.equal(ajaxData);
+                    expect(fixtures.body()).to.equal(ajaxData);
                 });
                 it("should insert duplicated fixture HTML into container when the same url is provided twice in a single call", function(){
                     fixtures.load(fixtureUrl, fixtureUrl);
-                    expect(fixturesBody().innerHTML).to.equal(ajaxData + ajaxData);
+                    expect(fixtures.body()).to.equal(ajaxData + ajaxData);
                 });
                 it("should insert merged HTML of two fixtures into container when two different urls are provided in a single call", function(){
                     fixtures.load(fixtureUrl, anotherFixtureUrl);
-                    expect(fixturesBody().innerHTML).to.equal(ajaxData + ajaxData);
+                    expect(fixtures.body()).to.equal(ajaxData + ajaxData);
                 });
                 describe("when fixture container does not exist", function(){
                     it("should automatically create fixtures container and append it to the DOM", function(){
@@ -127,7 +121,7 @@ define(function(require){
                     });
                     it("should execute the inline javascript after the fixture has been inserted into the body", function(){
                         fixtures.load(fixtureUrl);
-                        expect(fixturesBody().innerHTML).to.equal('test');
+                        expect(fixtures.body()).to.equal('test');
                     });
                 });
             });
@@ -155,7 +149,7 @@ define(function(require){
             describe("set", function() {
                 it("should insert HTML into container", function() {
                     fixtures.set(html);
-                    expect(fixturesBody().innerHTML.toLowerCase()).to.equal(html);
+                    expect(fixtures.body().toLowerCase()).to.equal(html);
                 });
 
                 describe("when fixture container does not exist", function() {
@@ -172,19 +166,20 @@ define(function(require){
 
                     it("should append it with new content", function() {
                         fixtures.set(html);
-                        expect(fixturesBody().innerHTML.toLowerCase()).to.equal('old content' + html);
+                        expect(fixtures.body().toLowerCase()).to.equal('old content' + html);
                     });
                 });
             });
             describe('sandbox', function(){
                 it('should insert the sandbox into the container', function(){
                     fixtures.sandbox({id: 'foo'});
-                    expect(fixturesBody().innerHTML).to.equal('<div id="foo"></div>');
+                    expect(fixtures.body()).to.equal('<div id="foo"></div>');
                 });
                 it('accepts booleans, numbers, and string', function(){
                     fixtures.sandbox({class: 'blah', selected: true, "data-blah": 3});
-                    expect(fixturesBody().childNodes.length).to.equal(1);
-                    var appendedDiv = fixturesBody().childNodes[0];
+                    var fixturesBody = fixtures.window().document.body;
+                    expect(fixturesBody.childNodes.length).to.equal(1);
+                    var appendedDiv = fixturesBody.childNodes[0];
 
                     expect(appendedDiv.getAttribute('class')).to.equal('blah');
                     expect(appendedDiv.getAttribute('selected')).to.equal('true');
