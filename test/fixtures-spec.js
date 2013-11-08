@@ -211,23 +211,23 @@ define(function(require){
                 fixtures.path = defaultFixturesPath;
             });
 
-            describe("when fixture file exists", function() {
+            describe('when attempting to load an external dependency (like jQuery)', function(){
                 var stub;
                 beforeEach(function(){
                     var xhr = sinon.useFakeXMLHttpRequest();
                     xhr.onCreate = function(xhr){
                         stub = sinon.stub(xhr, "send", function(something){
-                            xhr.responseText = '<div id="real_non_mocked_fixture"></div>';
+                            console.log('asdf');
+                            xhr.responseText = '<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>';
                         });
                     };
                 });
                 afterEach(function(){
                     stub.restore();
                 });
-                it("should load content of fixture file", function() {
-                   var fixtureUrl = "real_non_mocked_fixture.html";
-                   var fixtureContent = fixtures.read(fixtureUrl);
-                   expect(fixtureContent).to.equal('<div id="real_non_mocked_fixture"></div>');
+                it('jquery is immediately available after loading', function(){
+                    fixtures.load('some-fixture.html');
+                    expect(fixtures.window().$).to.exist;
                 });
             });
         });
