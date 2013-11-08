@@ -82,7 +82,3 @@ Options:
 
 ## Executing Tests
 Do an `npm install` to grab the test dependencies.  Then point your browser to the test/index.html file.
-
-## Cross domain policy problems under Chrome
-
-Newer versions of Chrome don't allow file:// URIs read other file:// URIs. In effect, js-fixtures cannot properly load fixtures under some versions of Chrome. An override for this is to run Chrome with a switch `--allow-file-access-from-files`.  Another way is to ensure that you are executing the test runner under a web server.
