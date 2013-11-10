@@ -30,8 +30,8 @@
             var content = self.window().document.body.innerHTML;
             return content; 
         };
-        self.load = function(){
-            addToContainer(self.read.apply(self, arguments));
+        self.load = function(html, cb){
+            addToContainer(self.read.apply(self, arguments), cb);
         };
         self.set = function(html){
             addToContainer(html);
@@ -45,10 +45,9 @@
         self.read = function(){
             var htmlChunks = [];
 
-            var fixtureUrls = arguments;
-            for (var urlCount = fixtureUrls.length, urlIndex = 0; urlIndex < urlCount; urlIndex++){
-                htmlChunks.push(getFixtureHtml(fixtureUrls[urlIndex]));
-            }
+            var fixtureUrls = Array.prototype.slice.call(arguments, 0).forEach(function(argument){
+                if (typeof argument === 'string') htmlChunks.push(getFixtureHtml(argument)); 
+            });
             return htmlChunks.join('');
         };
         self.clearCache = function(){
@@ -61,26 +60,32 @@
             iframe.parentNode.removeChild(iframe);
         };
         var createContainer  = function(html){
-
+            var cb = typeof arguments[arguments.length - 1] === 'function' ? arguments[arguments.length -1] : null;
             var iframe = document.createElement('iframe');
             iframe.setAttribute('id', self.containerId);
             iframe.style.display = 'none';
+
             document.body.appendChild(iframe);
             var doc = iframe.contentWindow || iframe.contentDocument;
             doc = doc.document ? doc.document : doc;
 
+            if (cb){
+                var iframeReady = setInterval(function(){
+                    if (doc.readyState === 'complete'){
+                        clearInterval(iframeReady);
+                        cb();
+                    }
+                }, 0);
+            }
+
             doc.open();
-            doc.write(html);
+            doc.write(html)
             doc.close();
         };
         var addToContainer = function(html){
             var container = document.getElementById(self.containerId);
-            if (!container){
-                createContainer(html);
-            } else{
-                var iframeWindow = container.contentWindow || container.contentDocument;
-                iframeWindow.document.body.innerHTML += html;
-            }
+            if (!container) createContainer.apply(self, arguments);
+            else self.window().document.body.innerHTML += html;
         };
         var getFixtureHtml = function(url){
             if (typeof fixturesCache[url] === 'undefined'){
@@ -101,8 +106,7 @@
         var objToHTML = function(obj){
             var divElem = document.createElement('div'); 
             for (var key in obj){
-                // IE < 9 compatibility 
-                if (key === 'class'){
+                if (key === 'class'){ // IE < 9 compatibility
                     divElem.className = obj[key];
                     continue;
                 }

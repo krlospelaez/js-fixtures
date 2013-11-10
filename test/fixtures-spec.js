@@ -124,6 +124,26 @@ define(function(require){
                         expect(fixtures.body()).to.equal('test');
                     });
                 });
+                describe('when callback is passed', function(){
+                    var stub;
+                    beforeEach(function(){
+                        var xhr = sinon.useFakeXMLHttpRequest();
+                        xhr.onCreate = function(xhr){
+                            stub = sinon.stub(xhr, "send", function(something){
+                                xhr.responseText = '<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>';
+                            });
+                        };
+                    });
+                    afterEach(function(){
+                        stub.restore();
+                    });
+                    it('executes callback upon iframe ready', function(done){
+                        fixtures.load('some-fixture.html', function(){
+                            expect(fixtures.window().$).to.exist;
+                            done();
+                        });
+                    });
+                });
             });
             describe("cache", function() {
                 describe("read after cache", function() {
@@ -195,39 +215,6 @@ define(function(require){
                 });
                 it('should succeed even if cleanup is called without loading', function(){
                     fixtures.cleanUp();
-                });
-            });
-        });
-
-        describe("fixtures using mock AJAX call", function() {
-            var defaultFixturesPath;
-
-            beforeEach(function() {
-                defaultFixturesPath = fixtures.path;
-                fixtures.path = 'spec/fixtures';
-            });
-
-            afterEach(function() {
-                fixtures.path = defaultFixturesPath;
-            });
-
-            describe('when attempting to load an external dependency (like jQuery)', function(){
-                var stub;
-                beforeEach(function(){
-                    var xhr = sinon.useFakeXMLHttpRequest();
-                    xhr.onCreate = function(xhr){
-                        stub = sinon.stub(xhr, "send", function(something){
-                            console.log('asdf');
-                            xhr.responseText = '<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>';
-                        });
-                    };
-                });
-                afterEach(function(){
-                    stub.restore();
-                });
-                it('jquery is immediately available after loading', function(){
-                    fixtures.load('some-fixture.html');
-                    expect(fixtures.window().$).to.exist;
                 });
             });
         });
