@@ -50,8 +50,9 @@ Your fixture is being loaded into an iframe container that is automatically adde
 
 Several methods for loading fixtures are provided:
 
-- `load(fixtureUrl[, fixtureUrl, ...])`
+- `load(fixtureUrl[, fixtureUrl, ...], cb)`
   - Loads fixture(s) from one or more files and automatically appends them to the DOM (to the fixtures container).
+  - If cb is provided, it will fire upon iframe ready
 - `set(html)`
   - Same as `load` except you may load markup directly without specifying a path
 - `sandbox(jsObject)`
