@@ -18,6 +18,7 @@
 
         self.containerId = 'js-fixtures';
         self.path = 'spec/javascripts/fixtures';
+        self.visible = false;
         self.window = function(){
             var iframe = document.getElementById(self.containerId);
             if (!iframe) return null;
@@ -63,7 +64,15 @@
             var cb = typeof arguments[arguments.length - 1] === 'function' ? arguments[arguments.length -1] : null;
             var iframe = document.createElement('iframe');
             iframe.setAttribute('id', self.containerId);
-            iframe.style.display = 'none';
+            if (self.visible) {
+                // Firefox needs the frame to be displayed in order for the contents
+                // to register as 'visible'.
+                iframe.style.display = 'block';
+                iframe.style.width = '1px';
+                iframe.style.height = '1px';
+            } else {
+                iframe.style.display = 'none';
+            }
 
             document.body.appendChild(iframe);
             var doc = iframe.contentWindow || iframe.contentDocument;
