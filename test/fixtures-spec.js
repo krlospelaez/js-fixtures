@@ -33,11 +33,55 @@ define(function(require){
                 it("should set 'spec/javascripts/fixtures/' as the default fixtures path", function(){
                     expect(fixtures.path).to.equal('spec/javascripts/fixtures');
                 });
+                it("should disable fixture visibility by default", function(){
+                    expect(fixtures.visible).to.equal(false);
+                });
                 it("should set body to null", function(){
                     expect(fixtures.body()).to.be(null);
                 });
                 it("should set window to null", function(){
                     expect(fixtures.window()).to.be(null);
+                });
+            });
+            describe("visible", function(){
+                // jQuery defines 'visible' based on if an element consumes space in the page layout.
+                // See http://api.jquery.com/visible-selector/
+                // and https://github.com/jquery/jquery/blob/master/src/css/hiddenVisibleSelectors.js
+                var oldVisible;
+                beforeEach(function(){
+                    oldVisible = fixtures.visible;
+                });
+                afterEach(function(){
+                    fixtures.visible = oldVisible;
+                });
+                
+                describe("when enabled", function(){
+                    beforeEach(function(){
+                        fixtures.visible = true;
+                        fixtures.set("<button id='test'>Test</button>");
+                    });
+                    it("should display fixtures", function(){
+                        var container = document.getElementById(fixtures.containerId);
+                        var button = fixtures.window().document.getElementById('test');
+                        expect(container.style.display).to.equal('block');
+                        // Firefox will collapse inner dimensions to 0 if the
+                        // element is not displayed.
+                        expect(button.offsetHeight).to.be.greaterThan(0);
+                        expect(button.offsetWidth).to.be.greaterThan(0);
+                    });
+                });
+                describe("when disabled", function(){
+                    beforeEach(function(){
+                        fixtures.visible = false;
+                        fixtures.set("<button id='test'>Test</button>");
+                    });
+                    it("should hide fixtures", function(){
+                        var container = document.getElementById(fixtures.containerId);
+                        var button = fixtures.window().document.getElementById('test');
+                        expect(container.style.display).to.equal('none');
+                        // Chrome never collapses the element while Firefox
+                        // does so we don't test dimensions here.
+                    });
                 });
             });
             describe("body", function(){
