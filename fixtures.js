@@ -80,6 +80,7 @@
             }
 
             doc.open();
+            doc.defaultView.onerror = captureErrors;
             doc.write(html)
             doc.close();
         };
@@ -87,6 +88,15 @@
             var container = document.getElementById(self.containerId);
             if (!container) createContainer.apply(self, arguments);
             else self.window().document.body.innerHTML += html;
+        };
+        var captureErrors = function(){
+            if (window.onerror){
+                // Rewrite the message prefix to indicate that the error
+                // occurred in the fixture.
+                arguments[0] = arguments[0].replace(/^[^:]*/, "Uncaught fixture error");
+                window.onerror.apply(window, arguments);
+            }
+            return true;
         };
         var getFixtureHtml = function(url){
             if (typeof fixturesCache[url] === 'undefined'){

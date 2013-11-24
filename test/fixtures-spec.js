@@ -50,6 +50,29 @@ define(function(require){
                     expect(button.offsetHeight).to.be.greaterThan(0);
                     expect(button.offsetWidth).to.be.greaterThan(0);
                 });
+                describe("throws an unhandled error", function(){
+                    var errorHandler;
+                    beforeEach(function(){
+                        errorHandler = window.onerror;
+                    });
+                    afterEach(function(){
+                        window.onerror = errorHandler;
+                    });
+                    it("is reported in the parent window", function(done){
+                        window.onerror = function (message) {
+                            // Need to manually pass failed exceptions to the
+                            // callback since we have overriden the default
+                            // error handler for the test case.
+                            try {
+                                expect(message).to.equal('Uncaught fixture error: boom');
+                                return done();
+                            } catch (error) {
+                                return done(error);
+                            }
+                        };
+                        fixtures.set('<scr' + 'ipt>throw new Error("boom")</scr' + 'ipt>');
+                    });
+                });
             });
             describe("body", function(){
                 it("should not be null when initialized properly", function(){
