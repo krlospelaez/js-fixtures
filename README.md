@@ -78,8 +78,6 @@ Finally, there are two convenience methods to access the contents of the sandbox
 Options:
 - `fixtures.containerId`
   - change the ID of the iframe that gets injected into the page
-- `fixtures.visible`
-  - make fixtures 'visible' in the DOM (default: false)
 - `fixtures.path`
  - change the path to look for fixtures (default: `spec/javascripts/fixtures`)
 
