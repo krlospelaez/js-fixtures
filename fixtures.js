@@ -18,7 +18,6 @@
 
         self.containerId = 'js-fixtures';
         self.path = 'spec/javascripts/fixtures';
-        self.visible = false;
         self.window = function(){
             var iframe = document.getElementById(self.containerId);
             if (!iframe) return null;
@@ -64,15 +63,8 @@
             var cb = typeof arguments[arguments.length - 1] === 'function' ? arguments[arguments.length -1] : null;
             var iframe = document.createElement('iframe');
             iframe.setAttribute('id', self.containerId);
-            if (self.visible) {
-                // Firefox needs the frame to be displayed in order for the contents
-                // to register as 'visible'.
-                iframe.style.display = 'block';
-                iframe.style.width = '1px';
-                iframe.style.height = '1px';
-            } else {
-                iframe.style.display = 'none';
-            }
+            iframe.style.opacity = 0;
+            iframe.style.filter = 'alpha(0)';
 
             document.body.appendChild(iframe);
             var doc = iframe.contentWindow || iframe.contentDocument;
@@ -88,6 +80,7 @@
             }
 
             doc.open();
+            doc.defaultView.onerror = captureErrors;
             doc.write(html)
             doc.close();
         };
@@ -95,6 +88,15 @@
             var container = document.getElementById(self.containerId);
             if (!container) createContainer.apply(self, arguments);
             else self.window().document.body.innerHTML += html;
+        };
+        var captureErrors = function(){
+            if (window.onerror){
+                // Rewrite the message prefix to indicate that the error
+                // occurred in the fixture.
+                arguments[0] = arguments[0].replace(/^[^:]*/, "Uncaught fixture error");
+                window.onerror.apply(window, arguments);
+            }
+            return true;
         };
         var getFixtureHtml = function(url){
             if (typeof fixturesCache[url] === 'undefined'){

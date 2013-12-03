@@ -33,9 +33,6 @@ define(function(require){
                 it("should set 'spec/javascripts/fixtures/' as the default fixtures path", function(){
                     expect(fixtures.path).to.equal('spec/javascripts/fixtures');
                 });
-                it("should disable fixture visibility by default", function(){
-                    expect(fixtures.visible).to.equal(false);
-                });
                 it("should set body to null", function(){
                     expect(fixtures.body()).to.be(null);
                 });
@@ -43,44 +40,37 @@ define(function(require){
                     expect(fixtures.window()).to.be(null);
                 });
             });
-            describe("visible", function(){
+            describe("content", function(){
                 // jQuery defines 'visible' based on if an element consumes space in the page layout.
                 // See http://api.jquery.com/visible-selector/
                 // and https://github.com/jquery/jquery/blob/master/src/css/hiddenVisibleSelectors.js
-                var oldVisible;
-                beforeEach(function(){
-                    oldVisible = fixtures.visible;
+                it("should be 'visible'", function(){
+                    fixtures.set("<button id='test'>Test</button>");
+                    var button = fixtures.window().document.getElementById('test');
+                    expect(button.offsetHeight).to.be.greaterThan(0);
+                    expect(button.offsetWidth).to.be.greaterThan(0);
                 });
-                afterEach(function(){
-                    fixtures.visible = oldVisible;
-                });
-                
-                describe("when enabled", function(){
+                describe("throws an unhandled error", function(){
+                    var errorHandler;
                     beforeEach(function(){
-                        fixtures.visible = true;
-                        fixtures.set("<button id='test'>Test</button>");
+                        errorHandler = window.onerror;
                     });
-                    it("should display fixtures", function(){
-                        var container = document.getElementById(fixtures.containerId);
-                        var button = fixtures.window().document.getElementById('test');
-                        expect(container.style.display).to.equal('block');
-                        // Firefox will collapse inner dimensions to 0 if the
-                        // element is not displayed.
-                        expect(button.offsetHeight).to.be.greaterThan(0);
-                        expect(button.offsetWidth).to.be.greaterThan(0);
+                    afterEach(function(){
+                        window.onerror = errorHandler;
                     });
-                });
-                describe("when disabled", function(){
-                    beforeEach(function(){
-                        fixtures.visible = false;
-                        fixtures.set("<button id='test'>Test</button>");
-                    });
-                    it("should hide fixtures", function(){
-                        var container = document.getElementById(fixtures.containerId);
-                        var button = fixtures.window().document.getElementById('test');
-                        expect(container.style.display).to.equal('none');
-                        // Chrome never collapses the element while Firefox
-                        // does so we don't test dimensions here.
+                    it("is reported in the parent window", function(done){
+                        window.onerror = function (message) {
+                            // Need to manually pass failed exceptions to the
+                            // callback since we have overriden the default
+                            // error handler for the test case.
+                            try {
+                                expect(message).to.equal('Uncaught fixture error: boom');
+                                return done();
+                            } catch (error) {
+                                return done(error);
+                            }
+                        };
+                        fixtures.set('<scr' + 'ipt>throw new Error("boom")</scr' + 'ipt>');
                     });
                 });
             });
