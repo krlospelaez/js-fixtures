@@ -45,7 +45,7 @@
         self.read = function(){
             var htmlChunks = [];
 
-            var fixtureUrls = Array.prototype.slice.call(arguments, 0).forEach(function(argument){
+            Array.prototype.slice.call(arguments, 0).forEach(function(argument){
                 if (typeof argument === 'string') htmlChunks.push(getFixtureHtml(argument)); 
             });
             return htmlChunks.join('');
@@ -81,7 +81,7 @@
 
             doc.open();
             doc.defaultView.onerror = captureErrors;
-            doc.write(html)
+            doc.write(html);
             doc.close();
         };
         var addToContainer = function(html){
