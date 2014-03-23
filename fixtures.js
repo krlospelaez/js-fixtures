@@ -30,7 +30,8 @@
             var content = self.window().document.body.innerHTML;
             return content; 
         };
-        self.load = function(html, cb){
+        self.load = function(html){
+            var cb = typeof arguments[arguments.length - 1] === 'function' ? arguments[arguments.length -1] : null;
             addToContainer(self.read.apply(self, arguments), cb);
         };
         self.set = function(html){
@@ -43,12 +44,12 @@
             addToContainer(objToHTML(obj));
         };
         self.read = function(){
-            var htmlChunks = [];
+            var htmlChunks = '';
 
             Array.prototype.slice.call(arguments, 0).forEach(function(argument){
-                if (typeof argument === 'string') htmlChunks.push(getFixtureHtml(argument)); 
+                if (typeof argument === 'string') htmlChunks += getFixtureHtml(argument);
             });
-            return htmlChunks.join('');
+            return htmlChunks;
         };
         self.clearCache = function(){
             fixturesCache = {};
@@ -84,7 +85,7 @@
             doc.write(html);
             doc.close();
         };
-        var addToContainer = function(html){
+        var addToContainer = function(html, cb){
             var container = document.getElementById(self.containerId);
             if (!container) createContainer.apply(self, arguments);
             else self.window().document.body.innerHTML += html;
