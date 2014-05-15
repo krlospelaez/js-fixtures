@@ -1,7 +1,7 @@
 {
   "author": "Duncan Wong <baduncaduncan@gmail.com>",
   "name": "js-fixtures",
-  "version": "1.5.2",
+  "version": "2.0.0",
   "description": "jasmine-like fixtures without testing framework dependencies",
   "keywords": [
     "test",
