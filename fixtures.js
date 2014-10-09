@@ -108,7 +108,8 @@
         var loadFixtureIntoCache = function(relativeUrl){
             var url = makeFixtureUrl(relativeUrl);
             var request = new XMLHttpRequest();
-            request.open('GET', url + '?' + new Date().getTime(), false);
+            var sep = url.indexOf('?') === -1 ? '?' : '&';
+            request.open('GET', url + sep + new Date().getTime(), false);
             request.send(null);
             fixturesCache[relativeUrl] = request.responseText;
         };
