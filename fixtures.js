@@ -34,28 +34,34 @@
             var cb = typeof arguments[arguments.length - 1] === 'function' ? arguments[arguments.length -1] : null;
             addToContainer(self.read.apply(self, arguments), cb);
         };
-        self.addJs = function(name, callback) {
+        self.injectScript = function(path, callback) {
             var scripts = document.getElementsByTagName('script'),
-                head;
+                head, src;
 
-            for (var i = 0; i < scripts.length; i++) {
-                var src = scripts[i].getAttribute('src');
+            //If the given path is not an URL
+            // We get the Url from the parent included scripts
+            if(path.indexOf('/') === -1) {
 
-                if (src && src.indexOf(name) !== -1) {
+                for (var i = 0; i < scripts.length; i++) {
+                    src = scripts[i].getAttribute('src');
 
-                    var doc = self.window().document;
-                    head = doc.getElementsByTagName('head')[0];
-
-                    var script = doc.createElement('script');
-                    script.type = 'text/javascript';
-                    script.async = true;
-                    script.onload = callback;
-                    script.src = src;
-                    head.appendChild(script);
-
-                    return;
+                    if (src && src.indexOf(path) !== -1) {
+                        path = src;
+                        break;
+                    }
                 }
             }
+
+            var doc = self.window().document;
+            head = doc.getElementsByTagName('head')[0];
+
+            var script = doc.createElement('script');
+            script.type = 'text/javascript';
+            script.async = true;
+            script.onload = callback;
+            script.src = path;
+            head.appendChild(script);
+
         };
         self.set = function(html){
             addToContainer(html);
