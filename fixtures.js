@@ -63,7 +63,6 @@
             head.appendChild(script);
 
         };
-
         self.set = function(html){
             addToContainer(html);
         };
