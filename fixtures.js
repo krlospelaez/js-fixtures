@@ -16,8 +16,45 @@
         var fixturesCache = {};
         var self = this;
 
+        self.breakpoints = {
+            "desktop": {
+                width: 1366,
+                height: 768
+            },
+            "tablet-portrait": {
+                width: 768,
+                height: 1024
+            },
+            "tablet-landscape": {
+                width: 1024,
+                height: 768
+            },
+            "mobile-portrait": {
+                width: 375,
+                height: 667
+            },
+            "mobile-landscape": {
+                width: 667,
+                height: 375
+            }
+        };
         self.containerId = 'js-fixtures';
         self.path = 'spec/javascripts/fixtures';
+
+        // set default breakpoint to dekstop
+        self.screenWidth = self.breakpoints.desktop.width;
+        self.screenHeight = self.breakpoints.desktop.height;
+        self.setScreenSize = function (width, height) {
+            self.screenWidth = width;
+            self.screenHeight = height;
+        };
+        self.setBreakpoint = function(breakpoint) {
+            if(self.breakpoints[breakpoint]) {
+                self.setScreenSize(self.breakpoints[breakpoint].width, self.breakpoints[breakpoint].height);
+                return true;
+            }
+            return false;
+        };
         self.window = function(){
             var iframe = document.getElementById(self.containerId);
             if (!iframe) return null;
@@ -95,6 +132,8 @@
             iframe.setAttribute('id', self.containerId);
             iframe.style.opacity = 0;
             iframe.style.filter = 'alpha(0)';
+            iframe.style.width = self.screenWidth + 'px';
+            iframe.style.height = self.screenHeight + 'px';
 
             document.body.appendChild(iframe);
             var doc = iframe.contentWindow || iframe.contentDocument;
