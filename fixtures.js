@@ -123,11 +123,6 @@
         self.cleanUp = function(){
             var coverageData, karmaResult;
             var iframe = document.getElementById(self.containerId);
-            if(!iframe) return null;
-
-            iframe.parentNode.removeChild(iframe);
-
-            var iframe = document.getElementById(self.containerId);
             if(!iframe) return null;            
 
             coverageData = iframe.contentWindow.__coverage__;
