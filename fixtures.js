@@ -121,8 +121,24 @@
             fixturesCache = {};
         };
         self.cleanUp = function(){
+            var coverageData, karmaResult;
             var iframe = document.getElementById(self.containerId);
             if(!iframe) return null;
+
+            iframe.parentNode.removeChild(iframe);
+
+            var iframe = document.getElementById(self.containerId);
+            if(!iframe) return null;            
+
+            coverageData = iframe.contentWindow.__coverage__;
+            karmaResult = (typeof window.__karma__ !=== "undefined") ? window.__karma__.result : undefined;
+            if(typeof coverageData !== "undefined" && typeof karmaResult === "undefined") {
+                karmaResult({
+                    suite: ['Iframe Data Coverage'],
+                    success: true,
+                    coverage: coverageData
+                });
+            }
 
             iframe.parentNode.removeChild(iframe);
         };
